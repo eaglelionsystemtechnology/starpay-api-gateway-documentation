@@ -9,7 +9,7 @@ export const HeroCard = ({
   title,
   description,
   href,
-  icon,
+  
 }) => {
   return (
     <a
@@ -29,25 +29,12 @@ export const HeroCard = ({
       />
 
       {/* Glow Effect */}
-      <div
-        className={`absolute inset-0 bg-gradient-to-r
-                   from-emerald-500/10 to-transparent
-                   dark:from-emerald-400/20
-                   opacity-0 group-hover:opacity-100
-                   transition duration-300 pointer-events-none`}
-      />
+
 
       {/* Content */}
       <div className="relative z-10 flex items-start gap-4">
 
-        {/* Icon */}
-        <div
-          className={`w-[150px] h-[80px] flex items-center justify-center rounded-lg
-                     bg-black/30 dark:bg-white/10 backdrop-blur
-                     group-hover:scale-105 transition`}
-        >
-          {icon}
-        </div>
+
 
         {/* Text */}
         <div>
