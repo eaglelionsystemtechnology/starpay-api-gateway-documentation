@@ -5,27 +5,18 @@ mode: "frame"
 keywords: ["overview", "platform", "getting started", "features"]
 ---
 
-export const HeroCard = ({
-  title,
-  description,
-  href,
-}) => {
+export const HeroCard = ({ title, description, href }) => {
   return (
     <a
       href={href}
-      className="group relative block rounded-2xl p-6 overflow-hidden
-                 bg-[gray]/20 dark:bg-zinc-900
-                 border border-gray-200 dark:border-zinc-700
-                 min-h-[180px]"
+      className="group relative block rounded-2xl p-6 overflow-hidden bg-[gray]/20 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 min-h-[180px]"
     >
-      {/* Background Image */}
       <img
         src="/images/pattern.png"
         alt="background pattern"
         className="absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none"
       />
 
-      {/* Content */}
       <div className="relative z-10 flex items-start gap-4">
         <div>
           <h3 className="text-3xl font-semibold text-gray-900 dark:text-white">
