@@ -38,9 +38,7 @@
                       "api-reference/endpoint/get-institutions",
                       "api-reference/endpoint/initiate-payment",
                       "api-reference/endpoint/account-lookup",
-                      "api-reference/endpoint/verify-otp-payment",
-                      "api-reference/test-numbers",
-                      "api-reference/sign"
+                      "api-reference/endpoint/verify-otp-payment"
                     ]
                   }
                 ]
@@ -63,14 +61,6 @@
                   "api-reference/endpoint/account-lookup",
                   "api-reference/endpoint/verify-otp-payment"
                 ]
-              },
-              {
-                "group": "API test Number",
-                "pages": ["api-reference/test-numbers"]
-              },
-              {
-                "group": "signature",
-                "pages": ["api-reference/sign"]
               }
             ]
           }
@@ -85,11 +75,7 @@
     "href": "/"
   },
   "api": {
-    "mdx": {
-      "auth": {
-        "method": "bearer"
-      }
-    }
+    "mdx": {}
   },
 
   "thumbnails": {
