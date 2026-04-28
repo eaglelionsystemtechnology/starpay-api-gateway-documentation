@@ -50,7 +50,7 @@
             "groups": [
               {
                 "group": "API documentation",
-                "pages": ["api-reference/introduction"]
+                "pages": ["api-reference/endpoint/get-institutions"]
               },
               {
                 "group": "Endpoints",
