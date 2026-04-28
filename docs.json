@@ -32,7 +32,7 @@
                 "pages": [
                   {
                     "group": "Api Reference",
-                    "root": "api/introductionget-institutions",
+                    "root": "api/introduction",
                     "pages": [
                       "api-reference/endpoint/get-institutions",
                       "api-reference/endpoint/initiate-payment",
