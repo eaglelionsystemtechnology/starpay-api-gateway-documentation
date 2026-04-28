@@ -1,75 +1,43 @@
 ---
 title: "Introduction"
-description: "Get started with Starpay. Learn the core concepts, architecture, and how to integrate our APIs into your system."
-mode: "frame"
-keywords: ["starpay", "introduction", "getting started", "api", "overview"]
+description: "Integrate your ERP software with Star-Pay payment gateway endpoints."
 ---
 
-export const HeroCard = ({ title, description, href }) => {
-  return (
-    <a
-      href={href}
-      className="group relative block rounded-2xl p-6 overflow-hidden bg-[gray]/20 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 min-h-[180px]"
-    >
-      <img
-        src="/images/pattern.png"
-        alt="background pattern"
-        className="absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none"
-      />
+## Star-Pay ERP API overview
 
-      <div className="relative z-10 flex items-start gap-4">
-        <div>
-          <h3 className="text-3xl font-semibold text-gray-900 dark:text-white">
-            {title}
-          </h3>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            {description}
-          </p>
-        </div>
-      </div>
-    </a>
+This API reference helps you integrate your ERP software with the Star-Pay gateway.
+You can use these endpoints to fetch institutions, validate customer accounts, initiate payment, and verify OTP-based payment flows.
 
-);
-};
+## Available ERP endpoints
 
-<div className="relative">
-  <div className="absolute top-0 botttom-0 left-0 right-0 opacity-80">
-    <img
-      src="/images/home/Cover-light.png"
-      className="block dark:hidden pointer-events-none w-full h-full"
-      alt="Decorative background image."
-    />
-    <img
-      src="/images/home/Cover-dark.png"
-      className="hidden dark:block pointer-events-none w-full h-full"
-      alt="Decorative background image."
-    />
-  </div>
+- `GET /erp/get-institutions`  
+  Get the list of supported institutions and payment capabilities.
+- `POST /erp/account-lookup`  
+  Validate account details and get a message ID for OTP payment flows.
+- `POST /erp/initiate-payment`  
+  Create a payment request for methods such as USSD push, OTP, card, QR, and more.
+- `POST /erp/verify-otp-payment`  
+  Complete OTP account payment using OTP code, account number, and bill reference.
 
-  <div className=" z-10 pt-[200px] max-w-4xl mx-auto h-screen ">
-    <h1 className="block text-4xl font-medium text-center text-gray-900 dark:text-zinc-50 tracking-tight">
-     Starpay Documentation
-    </h1>
+## Authentication headers
 
-    <div className="max-w-xl mx-auto px-4 mt-4 text-lg text-center text-gray-500 dark:text-zinc-500">
-    Comprehensive guides and API references to help you integrate Starpay, manage transactions, and build reliable financial workflows.
-    </div>
+All ERP endpoints require the `x-api-secret` header.
+For OTP verification flow, you also pass `x-message-id` where required.
 
-    <div className="px-6 lg:px-0  grid sm:grid-cols-2 gap-x-6 gap-y-4 mt-[50px]">
+## Typical ERP integration flow
 
-<HeroCard
-  href="/api/introduction"
-  title="Introduction"
-  description="Understand Starpay’s core concepts, system architecture, and how to get started quickly."
-/>
+1. Fetch institutions using `GET /erp/get-institutions`.
+2. Run account validation using `POST /erp/account-lookup`.
+3. Initiate payment using `POST /erp/initiate-payment`.
+4. If payment type is OTP, verify payment using `POST /erp/verify-otp-payment`.
 
-<HeroCard
-  title="ERP API Integration"
-  description="Learn how to connect your ERP system with Starpay APIs for seamless payment and reconciliation workflows."
-  href="/api/introduction"
-/>
+This flow gives you one GET endpoint and three POST endpoints to support ERP checkout and collection use cases.
 
-    </div>
-
-  </div>
-</div>
+<Card
+  title="API Specification"
+  icon="credit-card"
+  href="/api-reference/endpoint/get-institutions"
+>
+  Access the full API contract with detailed endpoints, parameters, and
+  request/response structures for StarPay ERP integration.
+</Card>

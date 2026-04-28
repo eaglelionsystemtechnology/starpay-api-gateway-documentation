@@ -32,9 +32,8 @@
                 "pages": [
                   {
                     "group": "Api Reference",
-                    "root": "api/introduction",
+                    "root": "api/introductionget-institutions",
                     "pages": [
-                      "api-reference/introduction",
                       "api-reference/endpoint/get-institutions",
                       "api-reference/endpoint/initiate-payment",
                       "api-reference/endpoint/account-lookup",
