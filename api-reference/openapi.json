@@ -289,6 +289,7 @@
       },
       "Institution": {
         "type": "object",
+        "description": "Institution and supported payment capabilities.",
         "properties": {
           "id": {
             "type": "string",
@@ -308,15 +309,18 @@
           },
           "pushPayment": {
             "type": "boolean",
-            "example": true
+            "example": true,
+            "description": "Indicates whether this institution supports in-app push payment."
           },
           "otpPayment": {
             "type": "boolean",
-            "example": false
+            "example": false,
+            "description": "Indicates whether this institution supports OTP-based payment."
           },
           "ussdPayment": {
             "type": "boolean",
-            "example": true
+            "example": true,
+            "description": "Indicates whether this institution supports USSD push payment."
           },
           "ussdCallbackType": {
             "type": "string",
@@ -349,6 +353,7 @@
           },
           "data": {
             "type": "array",
+            "description": "List of institutions with their supported payment options.",
             "items": {
               "$ref": "#/components/schemas/Institution"
             }
