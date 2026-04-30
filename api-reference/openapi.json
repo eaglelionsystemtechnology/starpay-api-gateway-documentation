@@ -233,6 +233,68 @@
           }
         }
       }
+    },
+    "/erp/verify": {
+      "post": {
+        "operationId": "verifypayment",
+        "tags": ["thirdparty"],
+        "summary": "for payment verification",
+        "x-codeSamples": [
+          {
+            "lang": "csharp",
+            "label": "C#",
+            "source": "using System.Net.Http;\n\nusing var client = new HttpClient();\nvar response = await client.GetAsync(\"https://starpayqa.starpayethiopia.com/v1/starpay-api/trdp/verify\");\nConsole.WriteLine(await response.Content.ReadAsStringAsync());\n"
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-secret",
+            "required": true,
+            "description": "The App Secret provided by CBE.",
+            "schema": {
+              "type": "string",
+              "example": "X/2uxXAjJqaai5gRzXHzcFPcx9E6B3pibBbVSoce1U23q5hR2Sr5pxlh6WLQZBep"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "verify",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/verifypayment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The request was successful, and a new `resource` was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentVerificationResponse",
+                  "required": ["status", "timestamp", "message", "data"]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
     }
   },
   "components": {
