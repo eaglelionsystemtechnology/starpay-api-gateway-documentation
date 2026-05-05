@@ -3,7 +3,7 @@
   "info": {
     "title": "StarPay API",
     "version": "1.0.0",
-    "description": "StarPay API is a RESTful API that provides access to various functionalities of the StarPay system.\nThis API allows users to manage product categories, including creating, updating, deleting, and retrieving product categories.\nThe API uses JWT for thirdparty and supports various response formats.\n"
+    "description": "StarPay API is a RESTful API that provides access to various functionalities of the StarPay system.\nThis API allows users to manage product categories, including creating, updating, deleting, and retrieving product categories.\nThe API uses JWT for thirdparty and supports various response formats.\n\n**Transaction status**\n\nUse **real-time** `GET /erp/api/txn-sse` (Server-Sent Events) to follow status updates for a `billRefNo`. If the SSE stream does not yield a usable result within **15 seconds**, call **`POST /erp/check-txn`** with the same `billRefNo` to poll the current transaction status.\n"
   },
   "servers": [
     {
@@ -218,6 +218,142 @@
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/erp/check-txn": {
+      "post": {
+        "operationId": "checkTransactionStatus",
+        "tags": ["erp"],
+        "summary": "Check transaction status (polling)",
+        "description": "Returns the current status for a bill reference. Use this when you need a single JSON response or as a **fallback** if the real-time SSE endpoint (`/erp/api/txn-sse`) does not respond within **15 seconds**.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-secret",
+            "required": true,
+            "description": "API secret key.",
+            "schema": {
+              "type": "string",
+              "example": "X0Lkj979tyUv1IPGQkd+qsx0N6o1LQPSUpfBa6ZCKvXosp0HVnciXSIyWmgyBl0B"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckTxnRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transaction found; `data.status` indicates outcome (for example `PAID` or `FAILED`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckTxnResponse"
+                },
+                "examples": {
+                  "paid": {
+                    "summary": "Paid transaction",
+                    "value": {
+                      "status": "success",
+                      "timestamp": "2026-05-05T05:12:33.505Z",
+                      "message": "Transaction found successfully",
+                      "data": {
+                        "billRefNo": "5WL30548HD",
+                        "status": "PAID",
+                        "timestamp": "2026-04-29T17:50:57.863Z",
+                        "message": "Payment successful",
+                        "merchantId": "42723792",
+                        "customerId": "",
+                        "externalReferenceId": "075SMPC2316706F7",
+                        "amount": 36500,
+                        "payment_type": "OTP_ACCOUNT",
+                        "receipt_url": "https://receipt.starpayethiopia.com/receiptqa/WST-5WL30548HD"
+                      }
+                    }
+                  },
+                  "failed": {
+                    "summary": "Failed transaction",
+                    "value": {
+                      "status": "success",
+                      "timestamp": "2026-05-05T05:14:11.103Z",
+                      "message": "Transaction found successfully",
+                      "data": {
+                        "billRefNo": "EU33Q8706U",
+                        "status": "FAILED",
+                        "message": ""
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/erp/api/txn-sse": {
+      "get": {
+        "operationId": "transactionStatusSse",
+        "tags": ["erp"],
+        "summary": "Transaction status (real-time, Server-Sent Events)",
+        "description": "Opens an **SSE** (`text/event-stream`) connection that pushes status updates for the given `billRefNo` in real time. Typical events include an initial status (for example `UNPAID`), then updates when the payment completes. A final event may include `\"_closed\": true`.\n\nRequest format example: `/txn-sse?billRefNo=T584KP095O` (gateway route in this spec: `/erp/api/txn-sse?billRefNo=...`).\n\nImportant: the full HTTP response is an **SSE stream**, not one JSON object. Parse each `data:` event payload as JSON.\n\nRaw `text/event-stream` example:\n\n```bash\ndata: {\"status\":\"UNPAID\"}\n\ndata: {\"amount\":1,\"billRefNo\":\"T584KP095O\",\"externalReference\":\"DE50JURNL0\",\"merchantId\":\"698856835bf6c24fd5ff3dac\",\"merchantName\":\"jimma merchant\",\"paymentChannel\":\"USSD_PUSH\",\"status\":\"PAID\",\"transactionId\":\"a407e6fa-3a77-49db-93fb-02e8a9c2d28f\",\"paidAt\":\"05 May 2026, 8:15 AM\",\"customerName\":\"tesfaye\",\"customerPhoneNumber\":\"+251944719460\",\"commissionAmount\":0.02,\"redirectUrl\":\"\",\"paidAmount\":0.98,\"updatedAt\":\"2026-05-05T05:15:41.341Z\"}\n\ndata: {\"amount\":1,\"status\":\"PAID\",\"_closed\":true}\n```\n\nIf you do not receive a definitive update within **15 seconds**, close the stream and use **`POST /erp/check-txn`** with the same `billRefNo` to poll status.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-secret",
+            "required": true,
+            "description": "API secret key.",
+            "schema": {
+              "type": "string",
+              "example": "X0Lkj979tyUv1IPGQkd+qsx0N6o1LQPSUpfBa6ZCKvXosp0HVnciXSIyWmgyBl0B"
+            }
+          },
+          {
+            "in": "query",
+            "name": "billRefNo",
+            "required": true,
+            "description": "Bill reference to subscribe to. Example call format: `/txn-sse?billRefNo=T584KP095O`.",
+            "schema": {
+              "type": "string",
+              "example": "T584KP095O"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TxnSseStreamResponse"
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
@@ -700,6 +836,91 @@
         },
         "required": ["status", "timestamp", "message", "data"]
       },
+      "CheckTxnRequest": {
+        "type": "object",
+        "properties": {
+          "billRefNo": {
+            "type": "string",
+            "example": "5WL30548HD"
+          }
+        },
+        "required": ["billRefNo"]
+      },
+      "CheckTxnResponseData": {
+        "type": "object",
+        "description": "Transaction details when found. Fields present depend on status (for example `PAID` includes amount and receipt; `FAILED` may only include `billRefNo`, `status`, and `message`).",
+        "properties": {
+          "billRefNo": {
+            "type": "string",
+            "example": "5WL30548HD"
+          },
+          "status": {
+            "type": "string",
+            "description": "Transaction status, for example `PAID` or `FAILED`.",
+            "example": "PAID"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Present for some successful payments."
+          },
+          "message": {
+            "type": "string",
+            "example": "Payment successful"
+          },
+          "merchantId": {
+            "type": "string",
+            "example": "42723792"
+          },
+          "customerId": {
+            "type": "string",
+            "example": ""
+          },
+          "externalReferenceId": {
+            "type": "string",
+            "example": "075SMPC2316706F7"
+          },
+          "amount": {
+            "type": "number",
+            "example": 36500
+          },
+          "payment_type": {
+            "type": "string",
+            "example": "OTP_ACCOUNT"
+          },
+          "receipt_url": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://receipt.starpayethiopia.com/receiptqa/WST-5WL30548HD"
+          }
+        },
+        "required": ["billRefNo", "status"]
+      },
+      "CheckTxnResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "message": {
+            "type": "string",
+            "example": "Transaction found successfully"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CheckTxnResponseData"
+          }
+        },
+        "required": ["status", "timestamp", "message", "data"]
+      },
+      "TxnSseStreamResponse": {
+        "type": "string",
+        "description": "SSE text stream payload. This is protocol framing, not a single JSON document. Parse each `data:` payload as JSON; shape varies (minimal status only, full payment detail, or final object with `_closed`)."
+      },
       "PaymentRequest": {
         "type": "object",
         "properties": {
@@ -1096,6 +1317,52 @@
         }
       }
     },
+    "examples": {
+      "TxnSseStreamExample": {
+        "summary": "Readable event-by-event SSE payload",
+        "value": {
+          "streamType": "text/event-stream",
+          "events": [
+            {
+              "event": "data",
+              "payload": {
+                "status": "UNPAID"
+              }
+            },
+            {
+              "event": "data",
+              "payload": {
+                "amount": 1,
+                "billRefNo": "T584KP095O",
+                "externalReference": "DE50JURNL0",
+                "merchantId": "698856835bf6c24fd5ff3dac",
+                "merchantName": "jimma merchant",
+                "paymentChannel": "USSD_PUSH",
+                "status": "PAID",
+                "transactionId": "a407e6fa-3a77-49db-93fb-02e8a9c2d28f",
+                "paidAt": "05 May 2026, 8:15 AM",
+                "customerName": "tesfaye",
+                "customerPhoneNumber": "+251944719460",
+                "commissionAmount": 0.02,
+                "redirectUrl": "",
+                "paidAmount": 0.98,
+                "updatedAt": "2026-05-05T05:15:41.341Z"
+              }
+            },
+            {
+              "event": "data",
+              "payload": {
+                "amount": 1,
+                "billRefNo": "T584KP095O",
+                "status": "PAID",
+                "_closed": true,
+                "updatedAt": "2026-05-05T05:15:41.341Z"
+              }
+            }
+          ]
+        }
+      }
+    },
     "responses": {
       "BadRequest": {
         "description": "Bad request.",
@@ -1133,6 +1400,30 @@
           "application/problem+json": {
             "schema": {
               "$ref": "#/components/schemas/serverError"
+            }
+          }
+        }
+      },
+      "TxnSseStreamResponse": {
+        "description": "Open SSE stream. Each event is one or more lines of the form `data: <json>` per the Server-Sent Events format. Do not parse the entire stream as one JSON object.",
+        "content": {
+          "text/event-stream": {
+            "schema": {
+              "$ref": "#/components/schemas/TxnSseStreamResponse"
+            },
+            "examples": {
+              "sseStream": {
+                "$ref": "#/components/examples/TxnSseStreamExample"
+              }
+            }
+          }
+        },
+        "headers": {
+          "Cache-Control": {
+            "description": "Typically `no-cache` for SSE.",
+            "schema": {
+              "type": "string",
+              "example": "no-cache, no-transform"
             }
           }
         }

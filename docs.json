@@ -36,6 +36,8 @@
                     "pages": [
                       "api-reference/endpoint/get-institutions",
                       "api-reference/endpoint/initiate-payment",
+                      "api-reference/endpoint/transaction-status-sse",
+                      "api-reference/endpoint/transaction-status-check",
                       "api-reference/endpoint/account-lookup",
                       "api-reference/endpoint/verify-otp-payment",
                       "api-reference/endpoint/verification",
@@ -59,6 +61,8 @@
                 "pages": [
                   "api-reference/endpoint/get-institutions",
                   "api-reference/endpoint/initiate-payment",
+                  "api-reference/endpoint/transaction-status-sse",
+                  "api-reference/endpoint/transaction-status-check",
                   "api-reference/endpoint/account-lookup",
                   "api-reference/endpoint/verify-otp-payment",
                   "api-reference/sign"
@@ -76,6 +80,7 @@
     "dark": "/logo/dark.svg",
     "href": "/"
   },
+  "openapi": "/api-reference/openapi.json",
   "api": {
     "mdx": {}
   },

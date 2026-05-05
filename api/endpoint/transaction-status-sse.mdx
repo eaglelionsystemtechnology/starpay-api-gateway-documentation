@@ -1,0 +1,40 @@
+---
+title: "Transaction status (SSE)"
+openapi: "GET /erp/api/txn-sse"
+---
+
+Use this endpoint for **real-time transaction status** updates using **Server-Sent Events (SSE)**.
+
+The response is **not one JSON object**. It is an SSE stream (`text/event-stream`) containing multiple events over time.
+
+## how SSE works
+
+- Your client opens one long-lived HTTP `GET` request to `/erp/api/txn-sse?billRefNo=...`.
+- Accepted query format is `/txn-sse?billRefNo=T584KP095O` (gateway route: `/erp/api/txn-sse?billRefNo=...`).
+- The server keeps the connection open and pushes updates as event lines:
+  - `data: {"status":"UNPAID"}`
+  - `data: {"status":"PAID", ...}`
+- Parse each `data:` line as JSON.
+- A final event can include `_closed: true`.
+
+Do not run `JSON.parse()` on the entire HTTP response body. Parse each `data:` event payload separately.
+
+## when to use fallback
+
+If SSE does not provide a definitive result within **15 seconds**, close the stream and call `POST /erp/check-txn` with the same `billRefNo` for manual status check.
+
+## implementation notes
+
+- Include the `x-api-secret` header.
+- Use a request timeout and reconnect strategy in your client.
+- Do not open multiple SSE streams for the same `billRefNo` unless needed.
+
+## raw SSE stream example
+
+```bash
+data: {"status":"UNPAID"}
+
+data: {"amount":1,"billRefNo":"T584KP095O","externalReference":"DE50JURNL0","merchantId":"698856835bf6c24fd5ff3dac","merchantName":"jimma merchant","paymentChannel":"USSD_PUSH","status":"PAID","transactionId":"a407e6fa-3a77-49db-93fb-02e8a9c2d28f","paidAt":"05 May 2026, 8:15 AM","customerName":"tesfaye","customerPhoneNumber":"+251944719460","commissionAmount":0.02,"redirectUrl":"","paidAmount":0.98,"updatedAt":"2026-05-05T05:15:41.341Z"}
+
+data: {"amount":1,"billRefNo":"T584KP095O","status":"PAID","_closed":true,"updatedAt":"2026-05-05T05:15:41.341Z"}
+```

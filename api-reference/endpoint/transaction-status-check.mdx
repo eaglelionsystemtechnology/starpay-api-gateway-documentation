@@ -1,0 +1,23 @@
+---
+title: "Transaction status check"
+openapi: "POST /erp/check-txn"
+---
+
+Use this endpoint for **manual transaction status** checks by `billRefNo`.
+
+## request
+
+Send `POST /erp/check-txn` with:
+
+- Header: `x-api-secret`
+- Body: `{ "billRefNo": "..." }`
+
+## response behavior
+
+- Returns current transaction state (for example `PAID` or `FAILED`).
+- If available, additional fields are returned (amount, receipt URL, merchant details, and more).
+
+## recommended usage
+
+For real-time tracking, start with `GET /erp/api/txn-sse`.  
+If SSE does not return a definitive result within **15 seconds**, use this endpoint as fallback.
