@@ -41,7 +41,6 @@
                       "api-reference/endpoint/verify-otp-payment",
                       "api-reference/endpoint/transaction-status-sse",
                       "api-reference/endpoint/transaction-status-check",
-                      "api-reference/endpoint/verification",
                       "api-reference/sign"
                     ]
                   }
