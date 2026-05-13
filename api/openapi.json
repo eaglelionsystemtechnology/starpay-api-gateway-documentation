@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://starpayqa.starpayethiopia.com/v1/starpay-api",
+      "url": "https://devc.starpayethiopia.com/v1/starpay-api/",
       "description": "Local server"
     }
   ],
