@@ -279,7 +279,8 @@
                       "message": "Transaction found successfully",
                       "data": {
                         "billRefNo": "5WL30548HD",
-                        "status": "PAID",
+                        "status": "PAID OR SETTLED",
+
                         "timestamp": "2026-04-29T17:50:57.863Z",
                         "message": "Payment successful",
                         "merchantId": "42723792",
@@ -1338,7 +1339,7 @@
                 "merchantId": "698856835bf6c24fd5ff3dac",
                 "merchantName": "jimma merchant",
                 "paymentChannel": "USSD_PUSH",
-                "status": "PAID",
+                "status": "PAID OR SETTLED",
                 "transactionId": "a407e6fa-3a77-49db-93fb-02e8a9c2d28f",
                 "paidAt": "05 May 2026, 8:15 AM",
                 "customerName": "tesfaye",
@@ -1354,7 +1355,7 @@
               "payload": {
                 "amount": 1,
                 "billRefNo": "T584KP095O",
-                "status": "PAID",
+                "status": "PAID OR SETTLED",
                 "_closed": true,
                 "updatedAt": "2026-05-05T05:15:41.341Z"
               }
