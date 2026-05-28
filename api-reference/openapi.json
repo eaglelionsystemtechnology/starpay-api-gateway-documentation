@@ -324,23 +324,18 @@
         }
       }
     },
-    "/erp/api/txn-sse": {
+    "api/txn-sse": {
       "get": {
         "operationId": "transactionStatusSse",
         "tags": ["erp"],
         "summary": "Transaction status (real-time, Server-Sent Events)",
-        "description": "Opens an **SSE** (`text/event-stream`) connection that pushes status updates for the given `billRefNo` in real time. Typical events include an initial status (for example `UNPAID`), then updates when the payment completes. A final event may include `\"_closed\": true`.\n\nRequest format example: `/txn-sse?billRefNo=T584KP095O` (gateway route in this spec: `/erp/api/txn-sse?billRefNo=...`).\n\nImportant: the full HTTP response is an **SSE stream**, not one JSON object. Parse each `data:` event payload as JSON.\n\nRaw `text/event-stream` example:\n\n```bash\ndata: {\"status\":\"UNPAID\"}\n\ndata: {\"amount\":1,\"billRefNo\":\"T584KP095O\",\"externalReference\":\"DE50JURNL0\",\"merchantId\":\"698856835bf6c24fd5ff3dac\",\"merchantName\":\"jimma merchant\",\"paymentChannel\":\"USSD_PUSH\",\"status\":\"PAID\",\"transactionId\":\"a407e6fa-3a77-49db-93fb-02e8a9c2d28f\",\"paidAt\":\"05 May 2026, 8:15 AM\",\"customerName\":\"tesfaye\",\"customerPhoneNumber\":\"+251944719460\",\"commissionAmount\":0.02,\"redirectUrl\":\"\",\"paidAmount\":0.98,\"updatedAt\":\"2026-05-05T05:15:41.341Z\"}\n\ndata: {\"amount\":1,\"status\":\"PAID\",\"_closed\":true}\n```\n\nIf you do not receive a definitive update within **15 seconds**, close the stream and use **`POST /erp/check-txn`** with the same `billRefNo` to poll status.",
-        "parameters": [
+        "servers": [
           {
-            "in": "header",
-            "name": "x-api-secret",
-            "required": true,
-            "description": "API secret key.",
-            "schema": {
-              "type": "string",
-              "example": "X0Lkj979tyUv1IPGQkd+qsx0N6o1LQPSUpfBa6ZCKvXosp0HVnciXSIyWmgyBl0B"
-            }
-          },
+            "url": "https://checkout.starpayethiopia.com",
+            "description": "Checkout SSE server"
+          }
+        ],
+        "parameters": [
           {
             "in": "query",
             "name": "billRefNo",
@@ -352,6 +347,8 @@
             }
           }
         ],
+        "description": "Opens an **SSE** (`text/event-stream`) connection that pushes status updates for the given `billRefNo` in real time. Typical events include an initial status (for example `UNPAID`), then updates when the payment completes. A final event may include `\"_closed\": true`.\n\nRequest format example: `/txn-sse?billRefNo=T584KP095O` (gateway route in this spec: `/erp/api/txn-sse?billRefNo=...`).\n\nImportant: the full HTTP response is an **SSE stream**, not one JSON object. Parse each `data:` event payload as JSON.\n\nRaw `text/event-stream` example:\n\n```bash\ndata: {\"status\":\"UNPAID\"}\n\ndata: {\"amount\":1,\"billRefNo\":\"T584KP095O\",\"externalReference\":\"DE50JURNL0\",\"merchantId\":\"698856835bf6c24fd5ff3dac\",\"merchantName\":\"jimma merchant\",\"paymentChannel\":\"USSD_PUSH\",\"status\":\"PAID\",\"transactionId\":\"a407e6fa-3a77-49db-93fb-02e8a9c2d28f\",\"paidAt\":\"05 May 2026, 8:15 AM\",\"customerName\":\"tesfaye\",\"customerPhoneNumber\":\"+251944719460\",\"commissionAmount\":0.02,\"redirectUrl\":\"\",\"paidAmount\":0.98,\"updatedAt\":\"2026-05-05T05:15:41.341Z\"}\n\ndata: {\"amount\":1,\"status\":\"PAID\",\"_closed\":true}\n```\n\nIf you do not receive a definitive update within **15 seconds**, close the stream and use **`POST /erp/check-txn`** with the same `billRefNo` to poll status.",
+
         "responses": {
           "200": {
             "$ref": "#/components/responses/TxnSseStreamResponse"
