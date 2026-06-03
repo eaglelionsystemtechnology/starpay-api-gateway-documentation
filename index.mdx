@@ -1,14 +1,14 @@
 ---
-title: "Introduction to starpay Ethiopian ERP API"
-description: "Integrate your ERP software with Star-Pay payment gateway endpoints."
+title: "Introduction to StarPay Ethiopia Direct API Documentation"
+description: "Integrate your software with StarPay payment gateway endpoints."
 ---
 
-## Star-Pay ERP API overview
+## StarPay API overview
 
-This API reference helps you integrate your ERP software with the Star-Pay gateway.
+This API reference helps you integrate your software with the Star-Pay gateway.
 You can use these endpoints to fetch institutions, validate customer accounts, initiate payment, and verify OTP-based payment flows.
 
-## Available ERP endpoints
+## Available endpoints
 
 - `GET /erp/get-institutions`  
   Get the list of supported institutions and payment capabilities.
@@ -21,10 +21,10 @@ You can use these endpoints to fetch institutions, validate customer accounts, i
 
 ## Authentication headers
 
-All ERP endpoints require the `x-api-secret` header.
+All endpoints require the `x-api-secret` header.
 For OTP verification flow, you also pass `x-message-id` where required.
 
-## Typical ERP integration flow
+## Typical integration flow
 
 1. Fetch institutions using `GET /erp/get-institutions`.
 2. Run account validation using `POST /erp/account-lookup`.
