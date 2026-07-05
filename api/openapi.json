@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://starpayqa.starpayethiopia.com/v1/starpay-api",
+      "url": "https://sandbox-api.starpayethiopia.com/v1/starpay-api/",
       "description": "Local server"
     }
   ],
@@ -376,7 +376,7 @@
           {
             "lang": "csharp",
             "label": "C#",
-            "source": "using System.Net.Http;\n\nusing var client = new HttpClient();\nvar response = await client.GetAsync(\"https://starpayqa.starpayethiopia.com/v1/starpay-api/trdp/verify\");\nConsole.WriteLine(await response.Content.ReadAsStringAsync());\n"
+            "source": "using System.Net.Http;\n\nusing var client = new HttpClient();\nvar response = await client.GetAsync(\"https://sandbox-api.starpayethiopia.com/v1/starpay-api/trdp/verify\");\nConsole.WriteLine(await response.Content.ReadAsStringAsync());\n"
           }
         ],
         "parameters": [
