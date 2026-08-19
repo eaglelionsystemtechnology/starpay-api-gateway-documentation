@@ -55,59 +55,6 @@
         }
       }
     },
-    "/erp/account-lookup": {
-      "post": {
-        "operationId": "accountLookup",
-        "tags": ["erp"],
-        "summary": "Lookup account holder details",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "x-api-secret",
-            "required": true,
-            "description": "API secret key.",
-            "schema": {
-              "type": "string",
-              "example": "MFUxSN98EV5IUU+RhYZh2f866adcTa4F5HJ2dGI3t8+MH3cvfk/gAZ492TnxwdiI"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AccountLookupRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Account lookup successful.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AccountLookupResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
-          }
-        }
-      }
-    },
     "/erp/initiate-payment": {
       "post": {
         "operationId": "initiatePayment",
@@ -557,54 +504,6 @@
         },
         "required": ["status", "timestamp", "message", "data"]
       },
-      "AccountLookupRequest": {
-        "type": "object",
-        "properties": {
-          "swift_code": {
-            "type": "string",
-            "example": "DASHETAA"
-          },
-          "accountNumber": {
-            "type": "string",
-            "example": "5075361069011"
-          }
-        },
-        "required": ["swift_code", "accountNumber"]
-      },
-      "AccountLookupResponseData": {
-        "type": "object",
-        "properties": {
-          "accountHolderName": {
-            "type": "string",
-            "example": "TESFAYE LEMI BEKELE"
-          },
-          "messageId": {
-            "type": "string"
-          }
-        },
-        "required": ["accountHolderName", "messageId"]
-      },
-      "AccountLookupResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "success"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "message": {
-            "type": "string",
-            "example": "Success"
-          },
-          "data": {
-            "$ref": "#/components/schemas/AccountLookupResponseData"
-          }
-        },
-        "required": ["status", "timestamp", "message", "data"]
-      },
       "PaymentCustomer": {
         "type": "object",
         "properties": {
@@ -698,6 +597,10 @@
           "customer_name": {
             "type": "string",
             "example": ""
+          },
+          "messageId": {
+            "type": "string",
+            "example": "3f6f6bb43389d2WEG5JK"
           }
         },
         "required": ["bill_ref", "customer_name"]
