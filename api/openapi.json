@@ -15,7 +15,9 @@
     "/erp/get-institutions": {
       "get": {
         "operationId": "getInstitutions",
-        "tags": ["erp"],
+        "tags": [
+          "erp"
+        ],
         "summary": "Get supported institutions",
         "parameters": [
           {
@@ -58,7 +60,9 @@
     "/erp/initiate-payment": {
       "post": {
         "operationId": "initiatePayment",
-        "tags": ["erp"],
+        "tags": [
+          "erp"
+        ],
         "summary": "Initiate payment",
         "parameters": [
           {
@@ -121,7 +125,9 @@
     "/erp/verify-otp-payment": {
       "post": {
         "operationId": "verifyOtpPayment",
-        "tags": ["erp"],
+        "tags": [
+          "erp"
+        ],
         "summary": "Verify OTP payment",
         "parameters": [
           {
@@ -184,7 +190,9 @@
     "/erp/check-txn": {
       "post": {
         "operationId": "checkTransactionStatus",
-        "tags": ["erp"],
+        "tags": [
+          "erp"
+        ],
         "summary": "Check transaction status (polling)",
         "description": "Returns the current status for a bill reference. Use this when you need a single JSON response or as a **fallback** if the real-time SSE endpoint (`/erp/api/txn-sse`) does not respond within **15 seconds**.",
         "parameters": [
@@ -227,7 +235,6 @@
                       "data": {
                         "billRefNo": "5WL30548HD",
                         "status": "PAID OR SETTLED",
-
                         "timestamp": "2026-04-29T17:50:57.863Z",
                         "message": "Payment successful",
                         "merchantId": "42723792",
@@ -274,7 +281,9 @@
     "/api/txn-sse": {
       "get": {
         "operationId": "transactionStatusSse",
-        "tags": ["erp"],
+        "tags": [
+          "erp"
+        ],
         "summary": "Transaction status (real-time, Server-Sent Events)",
         "description": "Opens an **SSE** (`text/event-stream`) connection that pushes status updates for the given `billRefNo` in real time. Typical events include an initial status (for example `UNPAID`), then updates when the payment completes. A final event may include `\"_closed\": true`.\n\nRequest format example: `/txn-sse?billRefNo=T584KP095O` (gateway route in this spec: `/erp/api/txn-sse?billRefNo=...`).\n\nImportant: the full HTTP response is an **SSE stream**, not one JSON object. Parse each `data:` event payload as JSON.\n\nRaw `text/event-stream` example:\n\n```bash\ndata: {\"status\":\"UNPAID\"}\n\ndata: {\"amount\":1,\"billRefNo\":\"T584KP095O\",\"externalReference\":\"DE50JURNL0\",\"merchantId\":\"698856835bf6c24fd5ff3dac\",\"merchantName\":\"jimma merchant\",\"paymentChannel\":\"USSD_PUSH\",\"status\":\"PAID\",\"transactionId\":\"a407e6fa-3a77-49db-93fb-02e8a9c2d28f\",\"paidAt\":\"05 May 2026, 8:15 AM\",\"customerName\":\"tesfaye\",\"customerPhoneNumber\":\"+251944719460\",\"commissionAmount\":0.02,\"redirectUrl\":\"\",\"paidAmount\":0.98,\"updatedAt\":\"2026-05-05T05:15:41.341Z\"}\n\ndata: {\"amount\":1,\"status\":\"PAID\",\"_closed\":true}\n```\n\nIf you do not receive a definitive update within **15 seconds**, close the stream and use **`POST /erp/check-txn`** with the same `billRefNo` to poll status.",
         "servers": [
@@ -317,7 +326,9 @@
     "/erp/verify": {
       "post": {
         "operationId": "verifypayment",
-        "tags": ["thirdparty"],
+        "tags": [
+          "thirdparty"
+        ],
         "summary": "for payment verification",
         "x-codeSamples": [
           {
@@ -356,7 +367,12 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PaymentVerificationResponse",
-                  "required": ["status", "timestamp", "message", "data"]
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "message",
+                    "data"
+                  ]
                 }
               }
             }
@@ -427,7 +443,12 @@
             "example": 500
           }
         },
-        "required": ["productId", "quantity", "item_name", "unit_price"]
+        "required": [
+          "productId",
+          "quantity",
+          "item_name",
+          "unit_price"
+        ]
       },
       "Institution": {
         "type": "object",
@@ -501,7 +522,12 @@
             }
           }
         },
-        "required": ["status", "timestamp", "message", "data"]
+        "required": [
+          "status",
+          "timestamp",
+          "message",
+          "data"
+        ]
       },
       "PaymentCustomer": {
         "type": "object",
@@ -518,14 +544,13 @@
             "type": "string",
             "format": "email",
             "example": "customer@gmail.com"
-          },
-          "accountNumber": {
-            "type": "string",
-            "description": "Required when payment type is OTP.",
-            "example": "5075361069011"
           }
         },
-        "required": ["fullName", "phoneNumber", "email"]
+        "required": [
+          "fullName",
+          "phoneNumber",
+          "email"
+        ]
       },
       "InitiatePaymentRequest": {
         "type": "object",
@@ -599,10 +624,14 @@
           },
           "messageId": {
             "type": "string",
+            "description": "The messageId appears in the response only when the paymentInitiationType is OTP.",
             "example": "3f6f6bb43389d2WEG5JK"
           }
         },
-        "required": ["bill_ref", "customer_name"]
+        "required": [
+          "bill_ref",
+          "customer_name"
+        ]
       },
       "InitiatePaymentResponse": {
         "type": "object",
@@ -623,7 +652,12 @@
             "$ref": "#/components/schemas/InitiatePaymentResponseData"
           }
         },
-        "required": ["status", "timestamp", "message", "data"]
+        "required": [
+          "status",
+          "timestamp",
+          "message",
+          "data"
+        ]
       },
       "VerifyOtpPaymentRequest": {
         "type": "object",
@@ -632,16 +666,15 @@
             "type": "string",
             "example": "686435"
           },
-          "accountNumber": {
-            "type": "string",
-            "example": "5075361069011"
-          },
           "billRefNo": {
             "type": "string",
             "example": "HY724Z749C"
           }
         },
-        "required": ["otpCode", "accountNumber", "billRefNo"]
+        "required": [
+          "otpCode",
+          "billRefNo"
+        ]
       },
       "VerifyOtpPaymentResponseData": {
         "type": "object",
@@ -734,7 +767,12 @@
             "$ref": "#/components/schemas/VerifyOtpPaymentResponseData"
           }
         },
-        "required": ["status", "timestamp", "message", "data"]
+        "required": [
+          "status",
+          "timestamp",
+          "message",
+          "data"
+        ]
       },
       "CheckTxnRequest": {
         "type": "object",
@@ -744,7 +782,9 @@
             "example": "5WL30548HD"
           }
         },
-        "required": ["billRefNo"]
+        "required": [
+          "billRefNo"
+        ]
       },
       "CheckTxnResponseData": {
         "type": "object",
@@ -794,7 +834,10 @@
             "example": "https://receipt.starpayethiopia.com/receiptqa/WST-5WL30548HD"
           }
         },
-        "required": ["billRefNo", "status"]
+        "required": [
+          "billRefNo",
+          "status"
+        ]
       },
       "CheckTxnResponse": {
         "type": "object",
@@ -815,7 +858,12 @@
             "$ref": "#/components/schemas/CheckTxnResponseData"
           }
         },
-        "required": ["status", "timestamp", "message", "data"]
+        "required": [
+          "status",
+          "timestamp",
+          "message",
+          "data"
+        ]
       },
       "TxnSseStreamResponse": {
         "type": "string",
@@ -884,7 +932,12 @@
                   "example": 500
                 }
               },
-              "required": ["productId", "quantity", "item_name", "unit_price"]
+              "required": [
+                "productId",
+                "quantity",
+                "item_name",
+                "unit_price"
+              ]
             }
           }
         },
@@ -921,10 +974,17 @@
                 "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiM2IxNjljN2Q1OTU3ZjgyOWQ3YzI1ZGQ1Mjc1NjZlNWUuMWNmMDcxYmJlYzA5OTNmNWRiOGFhNzMwMWQyM2UwZmVmMWM4MmJiZmM3YzQ0NDQzNWViZDgxNGZlZDYxODQ3ODQ5YmIyMTRmNDY3ZDA1ODgzMmQxMjdiNDE1OTMyOGNkM2NkZGMyNTNiNmRhOGNlMjZjZmYwMmE1YmI1OTY2MjIxZmUzNjY4YTVhMmFmOWQxNTEyODhhNTAxNGZhNmQyOTNkNzVkZjIxYzk1MGQxZTdhZDQ2ZGNhYTM1NTUwMjdlNWU4OWQ0YmFiZjc0MTlkNDc4ZTFhZTZmOTE4Mjc3YWZkMDc3MzMzMzdlZDNiZGU3MDRlY2E1NzM1MDQ3OGU5YTJhMWVkNTExNzFlNTI4NWViMzdiMGQ2ZGJiMDc0YTJiMWE3NjI1MDIxMjY4ZTdjYTZmNDgwOTczOWVmYjE5NmI1YTYzZjQwZmUzZWU4NjMzMGYyODBmNmY4OTY5ODUyZjUzOWU5NGMzNGJhNjhmZDg3MzNmNDVkNjJhODhiOTYzZDkzYS43MzhjMmNiMzY4NDc0YmM0NzljNGVkODY4NzYxODk3YiIsImlhdCI6MTc0NjUyMDI4OCwiZXhwIjoxNzQ2NjA2Njg4fQ.1QzHPn3r2gzYv5rReuSi1l1buF3CrYKv_9eQKlcvzYw"
               }
             },
-            "required": ["access_token"]
+            "required": [
+              "access_token"
+            ]
           }
         },
-        "required": ["status", "timestamp", "message", "data"]
+        "required": [
+          "status",
+          "timestamp",
+          "message",
+          "data"
+        ]
       },
       "trdpSessionResponse": {
         "description": "Create session.",

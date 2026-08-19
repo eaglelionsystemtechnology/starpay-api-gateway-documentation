@@ -519,11 +519,6 @@
             "type": "string",
             "format": "email",
             "example": "customer@gmail.com"
-          },
-          "accountNumber": {
-            "type": "string",
-            "description": "Required when payment type is OTP.",
-            "example": "5075361069011"
           }
         },
         "required": ["fullName", "phoneNumber", "email"]
@@ -600,6 +595,7 @@
           },
           "messageId": {
             "type": "string",
+            "description": "The messageId appears in the response only when the paymentInitiationType is OTP.",
             "example": "3f6f6bb43389d2WEG5JK"
           }
         },
@@ -633,16 +629,12 @@
             "type": "string",
             "example": "686435"
           },
-          "accountNumber": {
-            "type": "string",
-            "example": "5075361069011"
-          },
           "billRefNo": {
             "type": "string",
             "example": "HY724Z749C"
           }
         },
-        "required": ["otpCode", "accountNumber", "billRefNo"]
+        "required": ["otpCode", "billRefNo"]
       },
       "VerifyOtpPaymentResponseData": {
         "type": "object",
