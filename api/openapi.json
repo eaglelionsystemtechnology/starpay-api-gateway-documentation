@@ -143,11 +143,11 @@
           {
             "in": "header",
             "name": "x-message-id",
-            "required": true,
-            "description": "Message ID from account lookup when verifying OTP payment.",
+            "required": false,
+            "description": "Optional unless the initiate payment response returned a messageId.",
             "schema": {
               "type": "string",
-              "example": "0a162ea504918e1c85f64da9733b64bf25ff400394f8e1da6cdfb656e1338b9a8fe47e1b32429f13b1495b075857bf98"
+              "example": "3f6f6bb43389d2WEG5JK"
             }
           }
         ],
@@ -241,8 +241,8 @@
                         "customerId": "",
                         "externalReferenceId": "075SMPC2316706F7",
                         "amount": 36500,
-                        "payment_type": "OTP_ACCOUNT",
-                        "receipt_url": "https://receipt.starpayethiopia.com/receiptqa/WST-5WL30548HD"
+                        "paymentType": "OTP_ACCOUNT",
+                        "receiptUrl": "https://receipt.starpayethiopia.com/receiptqa/WST-5WL30548HD"
                       }
                     }
                   },
@@ -278,7 +278,7 @@
         }
       }
     },
-    "/api/txn-sse": {
+    "/checkout/stream/9799KUZH22W": {
       "get": {
         "operationId": "transactionStatusSse",
         "tags": [
@@ -288,7 +288,7 @@
         "description": "Opens an **SSE** (`text/event-stream`) connection that pushes status updates for the given `billRefNo` in real time. Typical events include an initial status (for example `UNPAID`), then updates when the payment completes. A final event may include `\"_closed\": true`.\n\nRequest format example: `/txn-sse?billRefNo=T584KP095O` (gateway route in this spec: `/erp/api/txn-sse?billRefNo=...`).\n\nImportant: the full HTTP response is an **SSE stream**, not one JSON object. Parse each `data:` event payload as JSON.\n\nRaw `text/event-stream` example:\n\n```bash\ndata: {\"status\":\"UNPAID\"}\n\ndata: {\"amount\":1,\"billRefNo\":\"T584KP095O\",\"externalReference\":\"DE50JURNL0\",\"merchantId\":\"698856835bf6c24fd5ff3dac\",\"merchantName\":\"jimma merchant\",\"paymentChannel\":\"USSD_PUSH\",\"status\":\"PAID\",\"transactionId\":\"a407e6fa-3a77-49db-93fb-02e8a9c2d28f\",\"paidAt\":\"05 May 2026, 8:15 AM\",\"customerName\":\"tesfaye\",\"customerPhoneNumber\":\"+251944719460\",\"commissionAmount\":0.02,\"redirectUrl\":\"\",\"paidAmount\":0.98,\"updatedAt\":\"2026-05-05T05:15:41.341Z\"}\n\ndata: {\"amount\":1,\"status\":\"PAID\",\"_closed\":true}\n```\n\nIf you do not receive a definitive update within **15 seconds**, close the stream and use **`POST /erp/check-txn`** with the same `billRefNo` to poll status.",
         "servers": [
           {
-            "url": "https://checkout.starpayethiopia.com",
+            "url": "https://sandbox-api.starpayethiopia.com/v1/starpay-api",
             "description": "Checkout SSE server"
           }
         ],
@@ -434,11 +434,11 @@
             "type": "integer",
             "example": 1
           },
-          "item_name": {
+          "itemName": {
             "type": "string",
             "example": "mobile"
           },
-          "unit_price": {
+          "unitPrice": {
             "type": "number",
             "example": 500
           }
@@ -446,8 +446,8 @@
         "required": [
           "productId",
           "quantity",
-          "item_name",
-          "unit_price"
+          "itemName",
+          "unitPrice"
         ]
       },
       "Institution": {
@@ -586,7 +586,7 @@
             "type": "number",
             "example": 0.03
           },
-          "swift_code": {
+          "swiftCode": {
             "type": "string",
             "example": "telebirr"
           },
@@ -606,7 +606,7 @@
           "paymentInitiationType",
           "items",
           "customerVat",
-          "swift_code",
+          "swiftCode",
           "callbackURL",
           "currency"
         ]
@@ -614,11 +614,11 @@
       "InitiatePaymentResponseData": {
         "type": "object",
         "properties": {
-          "bill_ref": {
+          "billRef": {
             "type": "string",
             "example": "NC61HO4977"
           },
-          "customer_name": {
+          "customerName": {
             "type": "string",
             "example": ""
           },
@@ -629,8 +629,8 @@
           }
         },
         "required": [
-          "bill_ref",
-          "customer_name"
+          "billRef",
+          "customerName"
         ]
       },
       "InitiatePaymentResponse": {
@@ -824,11 +824,11 @@
             "type": "number",
             "example": 36500
           },
-          "payment_type": {
+          "paymentType": {
             "type": "string",
             "example": "OTP_ACCOUNT"
           },
-          "receipt_url": {
+          "receiptUrl": {
             "type": "string",
             "format": "uri",
             "example": "https://receipt.starpayethiopia.com/receiptqa/WST-5WL30548HD"
@@ -923,11 +923,11 @@
                   "type": "integer",
                   "example": 1
                 },
-                "item_name": {
+                "itemName": {
                   "type": "string",
                   "example": "mobile"
                 },
-                "unit_price": {
+                "unitPrice": {
                   "type": "number",
                   "example": 500
                 }
@@ -935,8 +935,8 @@
               "required": [
                 "productId",
                 "quantity",
-                "item_name",
-                "unit_price"
+                "itemName",
+                "unitPrice"
               ]
             }
           }
@@ -948,7 +948,7 @@
           "customerName",
           "customerPhoneNumber",
           "items",
-          "api_secret"
+          "apiSecret"
         ]
       },
       "trdpSessionResponseResponse": {
@@ -969,13 +969,13 @@
           "data": {
             "type": "object",
             "properties": {
-              "session_token": {
+              "sessionToken": {
                 "type": "string",
                 "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiM2IxNjljN2Q1OTU3ZjgyOWQ3YzI1ZGQ1Mjc1NjZlNWUuMWNmMDcxYmJlYzA5OTNmNWRiOGFhNzMwMWQyM2UwZmVmMWM4MmJiZmM3YzQ0NDQzNWViZDgxNGZlZDYxODQ3ODQ5YmIyMTRmNDY3ZDA1ODgzMmQxMjdiNDE1OTMyOGNkM2NkZGMyNTNiNmRhOGNlMjZjZmYwMmE1YmI1OTY2MjIxZmUzNjY4YTVhMmFmOWQxNTEyODhhNTAxNGZhNmQyOTNkNzVkZjIxYzk1MGQxZTdhZDQ2ZGNhYTM1NTUwMjdlNWU4OWQ0YmFiZjc0MTlkNDc4ZTFhZTZmOTE4Mjc3YWZkMDc3MzMzMzdlZDNiZGU3MDRlY2E1NzM1MDQ3OGU5YTJhMWVkNTExNzFlNTI4NWViMzdiMGQ2ZGJiMDc0YTJiMWE3NjI1MDIxMjY4ZTdjYTZmNDgwOTczOWVmYjE5NmI1YTYzZjQwZmUzZWU4NjMzMGYyODBmNmY4OTY5ODUyZjUzOWU5NGMzNGJhNjhmZDg3MzNmNDVkNjJhODhiOTYzZDkzYS43MzhjMmNiMzY4NDc0YmM0NzljNGVkODY4NzYxODk3YiIsImlhdCI6MTc0NjUyMDI4OCwiZXhwIjoxNzQ2NjA2Njg4fQ.1QzHPn3r2gzYv5rReuSi1l1buF3CrYKv_9eQKlcvzYw"
               }
             },
             "required": [
-              "access_token"
+              "sessionToken"
             ]
           }
         },
@@ -995,7 +995,7 @@
             "properties": {
               "payload": {
                 "$ref": "#/components/schemas/payload",
-                "description": "The payload includes the following fields:\n\n- `merchant_id`\n\n- `api_secret`\n"
+                "description": "The payload includes the following fields:\n\n- `merchantId`\n\n- `apiSecret`\n"
               },
               "pk": {
                 "$ref": "#/components/schemas/pk"
@@ -1009,7 +1009,7 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/PaymentRequest",
-            "description": "The payload includes the following fields:\nyou can use the following example to create a payload:\n\n\n    Attention!:\n\n    - `merchant_id`\n\n\n    - `api_secret`\n"
+            "description": "The payload includes the following fields:\nyou can use the following example to create a payload:\n\n\n    Attention!:\n\n    - `merchantId`\n\n\n    - `apiSecret`\n"
           }
         ]
       },
@@ -1064,7 +1064,7 @@
           "data": {
             "type": "object",
             "properties": {
-              "order_id": {
+              "orderId": {
                 "type": "string"
               },
               "status": {
@@ -1076,21 +1076,21 @@
               "currency": {
                 "type": "string"
               },
-              "payment_url": {
+              "paymentUrl": {
                 "type": "string",
                 "format": "uri"
               },
-              "expires_at": {
+              "expiresAt": {
                 "type": "string",
                 "format": "date-time"
               },
               "metadata": {
                 "type": "object",
                 "properties": {
-                  "merchant_id": {
+                  "merchantId": {
                     "type": "string"
                   },
-                  "customer_id": {
+                  "customerId": {
                     "type": "string"
                   },
                   "description": {
@@ -1120,7 +1120,7 @@
           "data": {
             "type": "object",
             "properties": {
-              "order_id": {
+              "orderId": {
                 "type": "string",
                 "format": "uuid"
               },
@@ -1136,7 +1136,7 @@
                 "type": "string",
                 "example": "ETB"
               },
-              "updated_at": {
+              "updatedAt": {
                 "type": "string",
                 "format": "date-time"
               }

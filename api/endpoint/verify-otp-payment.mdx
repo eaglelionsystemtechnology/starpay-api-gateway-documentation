@@ -2,3 +2,10 @@
 title: "Verify OTP payment"
 openapi: "POST /erp/verify-otp-payment"
 ---
+
+Use this endpoint to confirm and finalize OTP-based payments.
+
+## Headers
+
+- `x-api-secret` (required): API secret key.
+- `x-message-id` (optional): Required only if the `POST /erp/initiate-payment` response returned a `messageId`.

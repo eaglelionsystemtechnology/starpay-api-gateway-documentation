@@ -213,7 +213,7 @@ public static class SignatureUtil
 
 SECRET="your_secret_here"
 TIMESTAMP=$(date +%s) # Unix timestamp
-BODY='{"order_id":123,"status":"paid"}'
+BODY='{"orderId":123,"status":"paid"}'
 
 # Create signature using openssl
 SIGNATURE=$(echo -n "${TIMESTAMP}.${BODY}" | openssl dgst -sha256 -hmac "$SECRET" | sed 's/^.* //')
@@ -365,7 +365,7 @@ public class CallbackController : ControllerBase
 ```bash
 SECRET="your_secret_here"
 TIMESTAMP=$(date +%s)
-BODY='{"order_id":123,"status":"paid"}'
+BODY='{"orderId":123,"status":"paid"}'
 
 SIGNATURE=$(echo -n "${TIMESTAMP}.${BODY}" | openssl dgst -sha256 -hmac "$SECRET" | sed 's/^.* //')
 
