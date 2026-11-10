@@ -92,6 +92,28 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/InitiatePaymentRequest"
+              },
+              "example": {
+                "customer": {
+                  "fullName": "Walk-in Customer",
+                  "phoneNumber": "+251900000000",
+                  "email": "customer@gmail.com"
+                },
+                "amount": 100,
+                "paymentInitiationType": "USSD_PUSH",
+                "items": [
+                  {
+                    "productId": "6812220726f547936d6c1976",
+                    "quantity": 1,
+                    "itemName": "Organic Honey 500g",
+                    "unitPrice": 100
+                  }
+                ],
+                "customerVat": 0.03,
+                "swiftCode": "telebirr",
+                "tinNumber": "0012345678",
+                "callbackURL": "http://localhost:2222/starpay/complete_payment",
+                "currency": "ETB"
               }
             }
           }
@@ -587,6 +609,11 @@
           "swiftCode": {
             "type": "string",
             "example": "telebirr"
+          },
+          "tinNumber": {
+            "type": "string",
+            "description": "The Tax Identification Number (TIN) of the merchant for tax reporting and verification.",
+            "example": "0012345678"
           },
           "callbackURL": {
             "type": "string",
